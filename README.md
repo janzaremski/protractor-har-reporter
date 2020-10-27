@@ -1,6 +1,6 @@
 # protractor-har-reporter
 
-Protractor reporter that is capturing [HAR files](https://en.wikipedia.org/wiki/HAR_(file_format)) from browser network traffic and saves them for later inspection.
+Protractor HAR reporter is capturing [HAR files](https://en.wikipedia.org/wiki/HAR_(file_format)) from browser network traffic and saves them to simplify debuggin of failed tests.
 
 ## Install
 
@@ -13,8 +13,8 @@ npm i --save protractor-har-reporter
 In your Protractor configuration file:
 
 ```js
-import {Config} from 'protractor';
-import {HARReporter} from 'protractor-har-reporter'
+import { Config } from 'protractor';
+import { HARReporter } from 'protractor-har-reporter'
 
 export let config: Config = {
 
@@ -35,7 +35,9 @@ export let config: Config = {
 }
 ```
 
-HAR files will be saved in the `harfiles` subdir of `resultsDir`.
+## Additional info
 
-HAR files collection works only on chrome browser with enabled performance logging.
+* HAR files will be saved in the `harfiles` subdir of `resultsDir`
+* HAR files collection works only on chrome browser with enabled performance logging
+* One HAR file is generated for one spec file, file name corresponds to spec name (describe statement)
 
