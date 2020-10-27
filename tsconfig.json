@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "outDir": "./dist",
+    "lib": ["es6", "dom", "es2017"],
+    "noEmitOnError": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "rootDir": "./src",
+    "types": ["jasmine", "jasminewd2", "q", "node", "selenium-webdriver"],
+    "resolveJsonModule": true
+  }
+}
