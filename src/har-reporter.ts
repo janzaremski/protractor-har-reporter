@@ -9,27 +9,26 @@ interface Configuration {
 
 export class HARReporter {
 
-    resultsDir: string;
+    private resultsDir: string;
+    private asyncFlow: Promise<any>;
 
     constructor(configuration: Configuration) {
         this.resultsDir = configuration.resultsDir;
     }
 
-    _asyncFlow: Promise<any>;
-
     jasmineStarted() {
         /* Wait for async tasks triggered by `suiteDone`. */
         afterAll(async () => {
-            await this._asyncFlow;
-            this._asyncFlow = null;
+            await this.asyncFlow;
+            this.asyncFlow = null;
         });
     }
 
     suiteDone(result) {
-        this._asyncFlow = this._asyncSuiteDone(result);
+        this.asyncFlow = this.asyncSuiteDone(result);
     }
 
-    async _asyncSuiteDone(result) {
+    private async asyncSuiteDone(result) {
         const browserName = (await browser.getCapabilities()).get('browserName');
         if (browserName == 'chrome') {
             const browserLogs = await browser.manage().logs().get('performance');

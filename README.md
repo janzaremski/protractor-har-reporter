@@ -21,7 +21,7 @@ export let config: Config = {
     capabilities: {
         browserName: 'chrome',
         loggingPrefs: {
-        performance: 'ALL'
+            performance: 'ALL'
         }
     },
     onPrepare: () => {
