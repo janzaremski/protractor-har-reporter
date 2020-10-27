@@ -13,18 +13,29 @@ npm i --save protractor-har-reporter
 In your Protractor configuration file:
 
 ```js
+import {Config} from 'protractor';
 import {HARReporter} from 'protractor-har-reporter'
 
-...
+export let config: Config = {
 
-onPrepare: () => {
+    capabilities: {
+        browserName: 'chrome',
+        loggingPrefs: {
+        performance: 'ALL'
+        }
+    },
+    onPrepare: () => {
 
-    const harReporter = new HARReporter({
-        resultsDir: './results'
-    });
+        const harReporter = new HARReporter({
+            resultsDir: './results'
+        });
 
-    jasmine.getEnv().addReporter(harReporter);
+        jasmine.getEnv().addReporter(harReporter);
+    }
 }
 ```
 
-HAR files will be saved in the `harfiles` subdir of `resultsDir`
+HAR files will be saved in the `harfiles` subdir of `resultsDir`.
+
+HAR files collection works only on chrome browser with enabled performance logging.
+
