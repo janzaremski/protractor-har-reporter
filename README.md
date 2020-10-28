@@ -2,6 +2,10 @@
 
 Protractor HAR reporter is capturing [HAR files](https://en.wikipedia.org/wiki/HAR_(file_format)) from browser network traffic and saves them to simplify debugging of failed tests.
 
+## Credits
+
+Inspiration and some pieces of code come from https://github.com/Everettss/puppeteer-har
+
 ## Install
 
 ```
