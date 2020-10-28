@@ -1,6 +1,6 @@
 # protractor-har-reporter
 
-Protractor HAR reporter is capturing [HAR files](https://en.wikipedia.org/wiki/HAR_(file_format)) from browser network traffic and saves them to simplify debuggin of failed tests.
+Protractor HAR reporter is capturing [HAR files](https://en.wikipedia.org/wiki/HAR_(file_format)) from browser network traffic and saves them to simplify debugging of failed tests.
 
 ## Install
 
