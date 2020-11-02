@@ -33,7 +33,7 @@ export class HARReporter {
         if (browserName == 'chrome') {
             const browserLogs = await browser.manage().logs().get('performance');
             if (browserLogs.length > 0) {
-                const specName = result.fullName.replace(/\s+/g, '-').toLowerCase();
+                const specName = result.fullName.trim().replace(/\s+/g, '-').toLowerCase();
                 const harDir = path.resolve(this.resultsDir, 'harfiles');
                 await fse.ensureDir(harDir)
                 const harPath = path.resolve(harDir, `${specName}.har`);
