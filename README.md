@@ -18,7 +18,7 @@ npm i --save protractor-har-reporter
 
 In your Protractor configuration file:
 
-```js
+```ts
 import { Config } from 'protractor';
 import { HARReporter } from 'protractor-har-reporter'
 
@@ -41,9 +41,14 @@ export let config: Config = {
 }
 ```
 
+### HARReporter([config])
+- `config` <[Object]>
+  - `resultsDir` <[string]> path to save HAR file
+  - `printLogs?` <[boolean]> when set to `true`, full path of saved HAR file will be printed after each spec, defaults to `false`
+
 ## Additional info
 
 * HAR files will be saved in the `harfiles` subdir of `resultsDir`
-* HAR files collection works only on chrome browser with enabled performance logging
-* One HAR file is generated for one spec file, file name corresponds to spec name (describe statement)
+* HAR files collection works only on Chrome browser with enabled performance logging
+* One HAR file is generated for one `it` block in spec file, file name corresponds to `describe` name followed by `it` name
 

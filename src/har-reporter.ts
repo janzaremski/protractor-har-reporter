@@ -1,42 +1,44 @@
 import { browser } from 'protractor';
 import { harFromMessages } from 'chrome-har';
-import * as fse from 'fs-extra';
-import * as path from 'path';
+import { ensureDir, writeFileSync } from 'fs-extra';
+import { resolve } from 'path';
 
 interface Configuration {
-    resultsDir: string
+    resultsDir: string,
+    printLogs?: boolean
 }
 
 export class HARReporter {
 
     private resultsDir: string;
-    private asyncFlow: Promise<any>;
+    private printLogs: boolean;
+    private asyncFlow: Promise<void>;
 
-    constructor(configuration: Configuration) {
-        this.resultsDir = configuration.resultsDir;
+    constructor(config: Configuration) {
+        this.resultsDir = config.resultsDir;
+        this.printLogs = config.printLogs || false
     }
 
     jasmineStarted() {
-        /* Wait for async tasks triggered by `suiteDone`. */
-        afterAll(async () => {
+        beforeEach(async () => {
             await this.asyncFlow;
             this.asyncFlow = null;
         });
     }
 
-    suiteDone(result) {
-        this.asyncFlow = this.asyncSuiteDone(result);
+    specDone(result) {
+        this.asyncFlow = this.asyncSpecDone(result);
     }
 
-    private async asyncSuiteDone(result) {
+    private async asyncSpecDone(result) {
         const browserName = (await browser.getCapabilities()).get('browserName');
         if (browserName == 'chrome') {
             const browserLogs = await browser.manage().logs().get('performance');
             if (browserLogs.length > 0) {
                 const specName = result.fullName.trim().replace(/\s+/g, '-').toLowerCase();
-                const harDir = path.resolve(this.resultsDir, 'harfiles');
-                await fse.ensureDir(harDir)
-                const harPath = path.resolve(harDir, `${specName}.har`);
+                const harDir = resolve(this.resultsDir, 'harfiles');
+                await ensureDir(harDir)
+                const harPath = resolve(harDir, `${specName}.har`);
                 const events = [];
                 const addResponseBodyPromises = [];
                 browserLogs.forEach(browserLog => {
@@ -70,11 +72,13 @@ export class HARReporter {
                 });
                 await Promise.all(addResponseBodyPromises);
                 const harObject = harFromMessages(events, { includeTextFromResponseBody: true });
-                fse.writeFileSync(harPath, JSON.stringify(harObject));
-                console.log(`Saving HAR file to ${harPath}`);
+                writeFileSync(harPath, JSON.stringify(harObject));
+                if (this.printLogs) {
+                    console.log(`Saving HAR file to ${harPath}`);
+                }
             }
         } else {
-            console.log(`${browserName} is not supported, chrome is the only supported browser`);
+            console.log(`${browserName} is not supported by protractor-har-reporter, Chrome is the only supported browser`);
         }
 
     }
