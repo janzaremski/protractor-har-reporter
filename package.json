@@ -1,6 +1,6 @@
 {
   "name": "protractor-har-reporter",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Protractor reporter for capturing browser HAR files",
   "main": "dist/har-reporter.js",
   "scripts": {
