@@ -45,6 +45,7 @@ export let config: Config = {
 - `config` <[Object]>
   - `resultsDir` <[string]> path to save HAR file
   - `printLogs?` <[boolean]> when set to `true`, full path of saved HAR file will be printed after each spec, defaults to `false`
+  - `saveOnlyForFailedSpecs?` <[boolean]> when set to `true`, HAR file will be saved only for failed specs, defaults to `false`
 
 ## Additional info
 

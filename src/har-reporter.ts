@@ -1,22 +1,25 @@
 import { browser } from 'protractor';
 import { harFromMessages } from 'chrome-har';
-import { ensureDir, writeFileSync } from 'fs-extra';
+import { ensureDir, writeFile } from 'fs-extra';
 import { resolve } from 'path';
 
 interface Configuration {
     resultsDir: string,
-    printLogs?: boolean
+    printLogs?: boolean,
+    saveOnlyForFailedSpecs?: boolean
 }
 
 export class HARReporter {
 
     private resultsDir: string;
     private printLogs: boolean;
+    private saveOnlyForFailedSpecs: boolean;
     private asyncFlow: Promise<void>;
 
     constructor(config: Configuration) {
         this.resultsDir = config.resultsDir;
         this.printLogs = config.printLogs || false
+        this.saveOnlyForFailedSpecs = config.saveOnlyForFailedSpecs || false
     }
 
     jasmineStarted() {
@@ -72,14 +75,18 @@ export class HARReporter {
                 });
                 await Promise.all(addResponseBodyPromises);
                 const harObject = harFromMessages(events, { includeTextFromResponseBody: true });
-                writeFileSync(harPath, JSON.stringify(harObject));
-                if (this.printLogs) {
-                    console.log(`Saving HAR file to ${harPath}`);
+
+                if ((this.saveOnlyForFailedSpecs && result.status == 'failed') || !this.saveOnlyForFailedSpecs) {
+
+                    if (this.printLogs) {
+                        console.log(`Saving HAR file to ${harPath}`);
+                    }
+
+                    await writeFile(harPath, JSON.stringify(harObject));
                 }
             }
         } else {
             console.log(`${browserName} is not supported by protractor-har-reporter, Chrome is the only supported browser`);
         }
-
     }
 }
