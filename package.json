@@ -5,8 +5,7 @@
   "main": "dist/har-reporter.js",
   "scripts": {
     "prebuild": "rimraf ./dist",
-    "build": "tsc",
-    "prepublish": "npm run build"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
